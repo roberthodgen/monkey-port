@@ -26,9 +26,9 @@ handlers:
   secure: always
 
 # Static files
-- url: /(.*\.(gif|png|jpg|css|js|html))$
+- url: /(.*\.(gif|png|jpg|css|js|html|woff2|svg|eot|woff|ttf))$
   static_files: static/\1
-  upload: static/.*\.(gif|png|jpg|css|js|html)$
+  upload: static/.*\.(gif|png|jpg|css|js|html|woff2|svg|eot|woff|ttf)$
 
 # AngularJS app stub
 - url: /.*
