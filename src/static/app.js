@@ -1,6 +1,10 @@
 (function() {
 
-	var app = angular.module('mp', ['ngRoute']);
+	var app = angular.module('mp', [
+		'ngRoute',
+
+		'mp.createPoll'
+	]);
 
 	// Configure the $routeProvider's routes
 	app.config(['$routeProvider', function($routeProvider) {
