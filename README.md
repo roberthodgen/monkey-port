@@ -11,6 +11,8 @@
 
 3. Python requirements using: `pip install -r requirements.txt`
 
+4. Rename `config_demo.py` to `config.py` and include any API keys as necessary...
+
 
 ### Usage
 ----
