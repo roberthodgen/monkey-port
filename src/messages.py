@@ -5,17 +5,19 @@ This file handles incoming messages!
 """
 
 import twilio.twiml
-# from twilio.rest import TwilioRestClient
+
+from twilio.rest import TwilioRestClient
+
 from flask import Flask, request
 
-# import config
+import config
 
 
 APP = Flask(__name__)
 
 # Download the twilio-python library from http://twilio.com/docs/libraries
 # Find these values at https://twilio.com/user/account
-# CLIENT = TwilioRestClient(config.ACCOUNT_SID, config.AUTH_TOKEN)
+CLIENT = TwilioRestClient(config.ACCOUNT_SID, config.AUTH_TOKEN)
 
 @APP.route('/messages/incoming', methods=['GET', 'POST'])
 def incoming_message():
@@ -30,7 +32,7 @@ def incoming_message():
         sms_message = 'No message content.'
 
     response = twilio.twiml.Response()
-    response.message(''.join(['Monkey see, monkey foo. Hello, ', from_number, "\n", sms_message]))
+    response.message(''.join(['Monkey see, monkey count. Hello, ', from_number, "\n", sms_message]))
     return str(response)
 
 
