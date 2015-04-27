@@ -60,3 +60,6 @@ target/
 
 # NPM-managed frameworks
 node_modules/
+
+# Private config file
+*config.py
