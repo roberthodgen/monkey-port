@@ -12,6 +12,10 @@ from flask import Flask, request
 
 import config
 
+from google.appengine.ext import ndb
+
+import re
+
 
 APP = Flask(__name__)
 
@@ -23,17 +27,24 @@ CLIENT = TwilioRestClient(config.ACCOUNT_SID, config.AUTH_TOKEN)
 def incoming_message():
     """ Respond to an incoming message. """
 
-    from_number = request.values.get('From', None)
-    if from_number is None:
+    response = twilio.twiml.Response()
+
+    from_number = request.values.get('From', False)
+    if not from_number:
         from_number = 'Unknown'
 
-    sms_message = request.values.get('Body', None)
-    if sms_message is None:
+    sms_message = request.values.get('Body', False)
+    if not sms_message:
+        print 'No SMS message received!'
         sms_message = 'No message content.'
 
-    response = twilio.twiml.Response()
-    response.message(''.join(['Monkey see, monkey count.', "\n",
-                              'http://monkey-port.appspot.com']))
+    # Attempt to find a response for this body...
+    response_key_id = re.match("[bcdfghjkmnpqrstvwxyz0-9]{4}", sms_message)
+    if response_key_id:
+        response.message('Your response has been recorded, thanks for voting!\n\nText another poll\'s reponse code to vote in another.')
+    else:
+        response.message('Could not find poll response. Please send a 4-character response code.')
+
     return str(response)
 
 
