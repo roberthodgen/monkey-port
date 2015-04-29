@@ -21,6 +21,10 @@ handlers:
   script: api.APP
   secure: always
 
+- url: /call/.*
+  script: call.APP
+  secure: always
+
 - url: /messages/.*
   script: messages.APP
   secure: always
@@ -35,3 +39,8 @@ handlers:
   static_files: static/app.html
   upload: static/app.html
   secure: always
+
+
+libraries:
+- name: webapp2
+  version: latest
