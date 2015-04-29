@@ -9,7 +9,7 @@
 
 2. Copy dependencies into the static directory (Angular, Bootstrap, etc.): `grunt copy` (may be claned using `grunt clean`)
 
-3. Python requirements using: `pip install -r requirements.txt`
+3. Python requirements using: `pip install -r requirements.txt -t vendor`
 
 4. Rename `config_demo.py` to `config.py` and include any API keys as necessary...
 
