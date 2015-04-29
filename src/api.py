@@ -4,13 +4,15 @@ This file handles incoming messages!
 
 """
 
-from flask import Flask
+from flask import Flask, request, Response
 
 import json
 
+import config
+
 import utilities
 
-# import config
+import model
 
 
 APP = Flask(__name__)
@@ -28,6 +30,57 @@ def incoming_message():
     response_object['id'] = utilities.generate_id()
 
     return json.dumps(response_object)
+
+
+@APP.route('/api/poll', methods=['POST'])
+def api_poll():
+    """ POST to `/api/poll`;
+    create a new Poll. """
+
+    request_object = request.get_json(force=True, silent=True)
+
+    response = Response()
+
+    if not isinstance(request_object, dict):
+        print 'Error============'
+        response.status_code = 400
+        return response
+
+    poll_question = request_object.get('question', None)
+    if not poll_question:
+        print 'request_object does not contain `question` key!'
+        response.status_code = 400
+        return response
+
+    poll_options = request_object.get('responses', None)
+    if not poll_options:
+        print 'request_object does not contain `responses` key!'
+        response.status_code = 400
+        return response
+
+    # Verify poll_options is an Array/List
+    if not isinstance(poll_options, list) or len(poll_options) < 2:
+        print 'request_object value of `responses` is not a list!'
+        response.status_code = 400
+        return response
+
+    question = model.Question.create_question(poll_question)
+
+    options = list()
+
+    for poll_option in poll_options:
+        option = model.Option.create_option(question.key,poll_option)
+        options.append(option.key.get().json)
+
+    response.headers['Content-Type'] = 'application/json'
+    response.data = json.dumps({
+        'question': question.name,
+        'id': question.key.id(),
+        'responses': options,
+        'response_count': len(options)
+    })
+
+    return response
 
 
 if __name__ == '__main__':

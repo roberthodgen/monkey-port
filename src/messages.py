@@ -32,7 +32,8 @@ def incoming_message():
         sms_message = 'No message content.'
 
     response = twilio.twiml.Response()
-    response.message(''.join(['Monkey see, monkey count. Hello, ', from_number, "\n", sms_message]))
+    response.message(''.join(['Monkey see, monkey count.', "\n",
+                              'http://monkey-port.appspot.com']))
     return str(response)
 
 
