@@ -35,6 +35,12 @@ module.exports = function(grunt) {
 				src: '**/*',
 				dest: 'src/static/vendor/angular-route',
 				filter: 'isFile'
+			}, angular_resource: {
+				expand: true,
+				cwd: 'node_modules/angular-resource',
+				src: '**/*',
+				dest: 'src/static/vendor/angular-resource',
+				filter: 'isFile'
 			}
 		}
 	});
