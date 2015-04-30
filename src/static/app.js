@@ -13,6 +13,8 @@
 		// Route handlers
 		$routeProvider.when('/', {
 			templateUrl: '/home/home.html'
+		}).when('/create-poll', {
+			templateUrl: '/home/home.html'
 		}).when('/poll/:pollId', {
 			templateUrl: '/poll-detail/poll-detail.html',
 			resolve: {
