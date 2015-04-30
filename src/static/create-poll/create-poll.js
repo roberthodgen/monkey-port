@@ -47,7 +47,7 @@
 						if (angular.isObject(response)) {
 							if (response.hasOwnProperty('id')) {
 								$location.path('/poll/'+response.id).search({
-									preview: true
+									preview: 'true'
 								});
 							}
 						}
