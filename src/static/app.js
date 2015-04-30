@@ -4,7 +4,7 @@
 		'ngRoute',
 		'ngResource',
 
-		'mp.createPoll'
+		'mp.poll'
 	]);
 
 	// Configure the $routeProvider's routes
@@ -16,7 +16,7 @@
 		}).when('/create-poll', {
 			templateUrl: '/home/home.html'
 		}).when('/poll/:pollId', {
-			templateUrl: '/poll-detail/poll-detail.html',
+			templateUrl: '/partials/poll-detail.html',
 			resolve: {
 				poll: function(Poll, $route) {
 					var pollId = $route.current.params.pollId;
@@ -49,7 +49,7 @@
 		};
 
 		$scope.findPollIdentifier = function() {
-			$location.path('/poll/'+$scope.searchPollIdentifier);
+			$location.path('/poll/'+$scope.searchPollIdentifier).search({ preview: 'false' });
 		};
 
 
