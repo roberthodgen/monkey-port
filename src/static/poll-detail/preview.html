@@ -1,0 +1,17 @@
+<div class="container">
+	<ol class="breadcrumb">
+		<li><a ng-href="/poll/{{ poll.id }}?preview=false"><span class="glyphicon glyphicon-chevron-left"></span>Responses</a></li>
+	</ol>
+
+	<div class="jumbotron">
+		<h1>{{ poll.question }}</h1>
+
+		<h2>Text a response code to: <strong>850-400-4949</strong></h2>
+
+		<hr>
+
+		<div ng-repeat="option in poll.options">
+			<h2><strong>{{ option.id }}</strong> <span class="text-muted">&mdash;</span> {{ option.name }}</h2>
+		</div>
+	</div>
+</div>

@@ -1,0 +1,17 @@
+<div class="container">
+	<h1>{{ poll.question }}</h1>
+
+	<p class="lead"><span class="text-muted">Poll identifier:</span> <strong>{{ poll.id }}</strong></p>
+
+	<a ng-href="/poll/{{ poll.id }}?preview=true" class="btn btn-block btn-default">Show large preview</a>
+
+	<hr>
+
+	<div class="response" ng-repeat="option in poll.options">
+		<h3><span class="text-muted" ng-pluralize count="option.response_count" when="{ 0: 'No votes', 1: '1 vote', 'other': '{} votes' }"></span> {{ option.name }}</h3>
+		<p><span class="text-muted">Response code:</span> <strong>{{ option.id }}</strong></p>
+		<div class="progress">
+			<div class="progress-bar" role="progress-bar" ng-style="{ 'width': (''+((option.response_count/poll.response_count)*100)+'%') }"></div>
+		</div>
+	</div>
+</div>
