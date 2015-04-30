@@ -32,6 +32,22 @@ def incoming_message():
     return json.dumps(response_object)
 
 
+@APP.route('/api/poll/<poll_id>', methods=['GET'])
+def get_api_poll(poll_id):
+    """ Return a single Poll. """
+
+    response = Response()
+
+    question = model.Question.get(poll_id)
+    if not isinstance(question, model.Question):
+        response.status_code = 400
+        return response
+
+    response.data = json.dumps(question.json)
+
+    return response
+
+
 @APP.route('/api/poll', methods=['POST'])
 def api_poll():
     """ POST to `/api/poll`;
@@ -68,8 +84,9 @@ def api_poll():
 
     options = list()
 
-    for poll_option in poll_options:
-        option = model.Option.create_option(question.key,poll_option)
+    for index, poll_option in enumerate(poll_options):
+        print index
+        option = model.Option.create_option(question.key,poll_option, index)
         options.append(option.key.get().json)
 
     response.headers['Content-Type'] = 'application/json'
