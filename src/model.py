@@ -69,6 +69,12 @@ class Question(ndb.Model):
         else:
             return False
 
+    @classmethod
+    def get(cls, key_id):
+        """ Attempt to retrieve a Question from the NDB Datastore for a given Key ID. """
+        question_key = ndb.Key(cls, key_id)
+        return question_key.get()
+
     @property
     def created_utc(self):
         """ Return `created` with tzinfo set to `UTC`. """
@@ -79,6 +85,24 @@ class Question(ndb.Model):
         """ Return `updated` with tzinfo set to `UTC`. """
         return self.updated.replace(tzinfo=UTC())
 
+    @property
+    def json(self):
+        """ Return a JSON-encodable dict for this Question. """
+        json_object = {
+            'question': self.name,
+            'id': self.key.id(),
+            'options': list(),
+            'response_count': 0
+        }
+        # Get all Options...
+        query = Option.query(Option.question==self.key).order(Option.order)
+        options = query.fetch(10)
+        for option in options:
+            option_json = option.json
+            json_object['options'].append(option_json)
+            json_object['response_count'] += option_json['response_count']
+        return json_object
+
 
 class Option(ndb.Model):
     """ This represents one of a Question's Options. """
@@ -86,18 +110,22 @@ class Option(ndb.Model):
     name = ndb.StringProperty(required=True)
     # Stores which Question this Option belongs to...
     question = ndb.KeyProperty(required=True)
+    # Saves the order in which to present Options
+    order = ndb.IntegerProperty()
     # Record WHEN this record was truly created and last updated
     created = ndb.DateTimeProperty(auto_now_add=True)
     updated = ndb.DateTimeProperty(auto_now=True)
 
     @classmethod
-    def create_option(cls, question_key, name):
+    def create_option(cls, question_key, name, order=None):
         """ Create a new Option under a given Question identified by
         `question_key`. """
         key_id = option_key_id()
         new_option = cls(name=name,
             question=question_key,
             id=key_id)
+        if order is not None:
+            new_option.order = order
         if new_option.put():
             return new_option
         else:
@@ -115,16 +143,18 @@ class Option(ndb.Model):
 
     @property
     def json(self):
-        return {
+        json_object = {
             'id': self.key.id(),
             'name': self.name
         }
+        # Get a count of Responses
+        query = Response.query(Response.option==self.key)
+        json_object['response_count'] = query.count(limit=100)
+        return json_object
 
 
 class Response(ndb.Model):
     """ Represents a Response to a Question's Option. """
-    # Stores which Question this Option belongs to...
-    question = ndb.KeyProperty(required=True)
     # Stores which Option this Response was for
     option = ndb.KeyProperty(required=True)
     # Record WHEN this record was truly created and last updated
@@ -132,12 +162,13 @@ class Response(ndb.Model):
     updated = ndb.DateTimeProperty(auto_now=True)
 
     @classmethod
-    def create_response(cls, question_key, option_key, phone_number):
+    def create_response(cls, option, phone_number):
         """ Create a Response for a given Question. """
+        key = ndb.Key(cls, utilities.secure_hash(phone_number), parent=option.question)
         new_response = cls(
-            key=utilities.secure_hash(phone_number),
-            option=option_key,
-            question=question_key)
+            key=key,
+            option=option.key
+        )
         return new_response.put()
 
     @property
