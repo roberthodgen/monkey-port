@@ -1,0 +1,21 @@
+<div class="container">
+	<h1>{{ poll.question }}</h1>
+
+	<p class="lead" style="margin-bottom:5px;">Poll identifier: <strong>{{ poll.id }}</strong> <span class="text-muted">(save this, you'll need it to find this poll later)</span></p>
+
+	<p class="lead" style="margin-bottom:5px;">Telephone number: <strong>850-400-4949</strong></p>
+
+	<p class="lead">Total responses: <strong>{{ poll.response_count }}</strong></p>
+
+	<a ng-href="/poll/{{ poll.id }}?preview=true" class="btn btn-block btn-default">Show large preview</a>
+
+	<hr>
+
+	<div class="response" ng-repeat="option in poll.options">
+		<h3><span class="text-muted" ng-pluralize count="option.response_count" when="{ 0: 'No votes', 1: '1 vote', 'other': '{} votes' }"></span> {{ option.name }}</h3>
+		<p><span class="text-muted">Response code:</span> <code class="no-background">{{ option.id }}</code></p>
+		<div class="progress">
+			<div class="progress-bar" role="progress-bar" ng-style="{ 'width': (''+((option.response_count/poll.response_count)*100)+'%') }"></div>
+		</div>
+	</div>
+</div>
