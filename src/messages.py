@@ -16,6 +16,8 @@ from google.appengine.ext import ndb
 
 import re
 
+import model
+
 
 APP = Flask(__name__)
 
@@ -39,11 +41,27 @@ def incoming_message():
         sms_message = 'No message content.'
 
     # Attempt to find a response for this body...
-    response_key_id = re.match("[bcdfghjkmnpqrstvwxyz0-9]{4}", sms_message)
-    if response_key_id:
-        response.message('Your response has been recorded, thanks for voting!\n\nText another poll\'s reponse code to vote in another.')
+    pattern = re.compile('[bcdfghjkmnpqrstvwxyz0-9]{4}', re.I)
+    match = re.match(pattern, sms_message)
+    if match:
+
+        response_key_id = match.group(0).lower()
+
+        option_key = ndb.Key(model.Option, response_key_id)
+        option = option_key.get()
+        if option is None:
+            response.message('Response code not found. Please verify your 4-character response code.')
+            return str(response)
+
+        poll_response_key = model.Response.create_response(option, str(from_number))
+        if poll_response_key:
+            response.message('Your response has been recorded, thanks for voting!\n\nText another poll\'s reponse code to vote in another.')
+            return str(response)
+        else:
+            response.message('There was an error recording your response. Please tray again later.')
+            return str(response)
     else:
-        response.message('Could not find poll response. Please send a 4-character response code.')
+        response.message('Response code invalid. Please send a 4-character response code.')
 
     return str(response)
 
