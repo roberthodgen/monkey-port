@@ -6,12 +6,15 @@
 	<div class="jumbotron">
 		<h1>{{ poll.question }}</h1>
 
-		<h2>Text a response code to: <strong>850-400-4949</strong></h2>
-
 		<hr>
 
 		<div ng-repeat="option in poll.options">
-			<h2><strong>{{ option.id }}</strong> <span class="text-muted">&mdash;</span> {{ option.name }}</h2>
+			<h2><code>{{ option.id }}</code> <span class="text-muted">&mdash;</span> {{ option.name }}</h2>
 		</div>
+
+		<hr>
+
+		<h2>Text a <code>response code</code> to: <strong>850-400-4949</strong></h2>
+
 	</div>
 </div>

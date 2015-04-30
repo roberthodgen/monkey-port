@@ -3,3 +3,7 @@ body { padding-top: 70px; }
 .response {
 	border-bottom: 1px solid #eee;
 }
+
+div.jumbotron code {
+	background-color: inherit;
+}
