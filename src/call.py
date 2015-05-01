@@ -19,7 +19,8 @@ class CodeInputHandler(webapp2.RequestHandler):
 		number_to_call = utilities.number_for_code(raw_digits)
 		if number_to_call:
 			response.say(
-				'Your call is being transferred. Press the star key to hangup on the dialed party',
+				'Your call is being transferred. Press the star key to hangup\
+ on the dialed party',
 				voice='alice',
 				language='en-GB'
 			)
