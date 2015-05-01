@@ -14,7 +14,7 @@
 		$routeProvider.when('/', {
 			templateUrl: '/partials/home.html'
 		}).when('/create-poll', {
-			templateUrl: '/partials/home.html'
+			templateUrl: '/partials/create-poll.html'
 		}).when('/poll/:pollId', {
 			templateUrl: '/partials/poll-detail.html',
 			resolve: {
