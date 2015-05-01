@@ -25,7 +25,7 @@ def secure_hash(a_str):
 def verbose_call_status(call_status):
 	""" Return a verbose string (to speak) for a given call status as `call_status`. """
 	return {
-		'completed': 'The call has ended',
+		'completed': 'Call completed',
 		'busy': 'A busy signal was received when trying to connect',
 		'no-answer': 'The called party did not pick up before the timeout period passed',
 		'failed': 'The call has failed',
