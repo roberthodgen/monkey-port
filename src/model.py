@@ -71,7 +71,8 @@ class Question(ndb.Model):
 
     @classmethod
     def get(cls, key_id):
-        """ Attempt to retrieve a Question from the NDB Datastore for a given Key ID. """
+        """ Attempt to retrieve a Question from the NDB Datastore for a given
+        Key ID. """
         question_key = ndb.Key(cls, key_id)
         return question_key.get()
 
@@ -164,7 +165,11 @@ class Response(ndb.Model):
     @classmethod
     def create_response(cls, option, phone_number):
         """ Create a Response for a given Question. """
-        key = ndb.Key(cls, utilities.secure_hash(phone_number), parent=option.question)
+        key = ndb.Key(
+            cls,
+            utilities.secure_hash(phone_number),
+            parent=option.question
+        )
         new_response = cls(
             key=key,
             option=option.key
